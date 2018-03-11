@@ -16,7 +16,7 @@ script:
   - mix coveralls.html --max-cases 1
   - mix credo
   - mix dialyzer --halt-exit-status
-  - mix format --dry-run
+  - mix format --check-formatted --dry-run
 
 cache:
   directories:
