@@ -2,42 +2,41 @@ defmodule Downstream.Download do
   @moduledoc """
   """
 
-  alias Downstream.Options
   alias HTTPoison.{AsyncChunk, AsyncEnd, AsyncHeaders, AsyncStatus}
 
   @message_timeout 5_000
 
-  @spec stream(Options.t() | map) :: tuple
-  def stream(options) do
+  @spec stream(IO.device()) :: tuple
+  def stream(io_device) do
     receive do
-      response_chunk -> handle_response_chunk(response_chunk, options)
+      response_chunk -> handle_response_chunk(response_chunk, io_device)
     after
-      @message_timeout -> {:error, :message_timeout}
+      @message_timeout -> {:error, "request timeout"}
     end
   end
 
-  defp handle_response_chunk(%AsyncStatus{code: 200}, options) do
-    stream(options)
+  defp handle_response_chunk(%AsyncStatus{code: 200}, io_device) do
+    stream(io_device)
   end
 
-  defp handle_response_chunk(%AsyncStatus{code: code}, _options) do
-    {:error, :status_code, code}
+  defp handle_response_chunk(%AsyncStatus{code: code}, _io_device) do
+    {:error, "status code #{code}"}
   end
 
-  defp handle_response_chunk(%AsyncHeaders{headers: _headers}, options) do
-    stream(options)
+  defp handle_response_chunk(%AsyncHeaders{headers: _headers}, io_device) do
+    stream(io_device)
   end
 
-  defp handle_response_chunk(%AsyncChunk{chunk: data}, options) do
-    IO.binwrite(options.file, data)
-    stream(options)
+  defp handle_response_chunk(%AsyncChunk{chunk: data}, io_device) do
+    IO.binwrite(io_device, data)
+    stream(io_device)
   end
 
-  defp handle_response_chunk(%AsyncEnd{}, options) do
-    {:ok, options.file_path}
+  defp handle_response_chunk(%AsyncEnd{}, io_device) do
+    {:ok, io_device}
   end
 
-  defp handle_response_chunk(_, _options) do
-    {:error, :unexpected_error}
+  defp handle_response_chunk(_, _io_device) do
+    {:error, "unexpected error"}
   end
 end
