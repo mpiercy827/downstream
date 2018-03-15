@@ -23,4 +23,21 @@ defmodule Downstream do
       {:ok, io_device} -> io_device
     end
   end
+
+  @spec post(binary, IO.device(), binary | {atom, any}, [{binary, binary}]) :: {atom, binary}
+  def post(url, io_device, body \\ "", headers \\ []) do
+    download_task = Task.async(Download, :stream, [io_device])
+
+    HTTPoison.post!(url, body, headers, stream_to: download_task.pid)
+
+    Task.await(download_task, @request_timeout)
+  end
+
+  @spec post!(binary, IO.device(), binary | {atom, any}, [{binary, binary}]) :: binary
+  def post!(url, io_device, body \\ "", headers \\ []) do
+    case post(url, io_device, body, headers) do
+      {:error, error} -> raise to_string(error)
+      {:ok, io_device} -> io_device
+    end
+  end
 end
