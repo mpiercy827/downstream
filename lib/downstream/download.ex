@@ -1,5 +1,6 @@
 defmodule Downstream.Download do
   @moduledoc """
+  The `Downstream.Download` module processes `HTTPoison` asynchronous requests.
   """
 
   alias HTTPoison.{AsyncChunk, AsyncEnd, AsyncHeaders, AsyncStatus}
