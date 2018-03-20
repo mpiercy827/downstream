@@ -22,6 +22,12 @@ defmodule DownstreamTest do
     test "returns an error for an unsuccessful download", context do
       assert Downstream.get(@error_url, context.io_device) == {:error, "status code 404"}
     end
+
+    test "accepts a configurable timeout", context do
+      url = "#{@success_url}?sleep=5000"
+
+      assert Downstream.get(url, context.io_device, timeout: 1_000) == {:error, "request timeout"}
+    end
   end
 
   describe "get!/3" do
@@ -61,6 +67,13 @@ defmodule DownstreamTest do
 
     test "returns an error for an unsuccessful download", context do
       assert Downstream.post(@error_url, context.io_device) == {:error, "status code 404"}
+    end
+
+    test "accepts a configurable timeout", context do
+      url = "#{@success_url}?sleep=5000"
+
+      assert Downstream.post(url, context.io_device, "", timeout: 1_000) ==
+               {:error, "request timeout"}
     end
   end
 
