@@ -6,8 +6,10 @@ defmodule Downstream.MixProject do
       app: :downstream,
       deps: deps(),
       docs: docs(),
+      description: "An Elixir Client for Streaming Downloads",
       elixir: "~> 1.6",
       name: "Downstream",
+      package: package(),
       preferred_cli_env: ["coveralls.html": :test],
       start_permanent: Mix.env() == :prod,
       source_url: "https://github.com/mpiercy827/downstream",
@@ -35,6 +37,17 @@ defmodule Downstream.MixProject do
   defp docs do
     [
       main: "Downstream"
+    ]
+  end
+
+  defp package do
+    [
+      files: ["lib", "LICENSE", "mix.exs", "README.md"],
+      maintainers: ["Matt Piercy"],
+      licenses: ["MIT"],
+      links: %{
+        "github" => "https://github.com/mpiercy827/downstream"
+      }
     ]
   end
 end
