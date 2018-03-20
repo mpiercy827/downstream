@@ -5,14 +5,10 @@ defmodule Downstream.Download do
 
   alias HTTPoison.{AsyncChunk, AsyncEnd, AsyncHeaders, AsyncStatus}
 
-  @message_timeout 5_000
-
   @spec stream(IO.device()) :: tuple
   def stream(io_device) do
     receive do
       response_chunk -> handle_response_chunk(response_chunk, io_device)
-    after
-      @message_timeout -> {:error, "request timeout"}
     end
   end
 
