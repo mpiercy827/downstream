@@ -43,3 +43,39 @@ file = File.open!("index.html", [:write])
 ## Roadmap
 
 - [ ] Add support for callbacks (i.e. header handler, status handler, etc.)
+
+## Development
+
+### Running Tests
+
+To run the tests, run one of the following commands:
+
+```bash
+$ mix test           # Run test suite without code coverage analysis
+$ mix coveralls.html # Run test suite with code coverage analysis
+```
+
+### Linter
+
+To run the linter, run the following command:
+
+```bash
+$ mix credo
+```
+
+### Type Analysis
+
+To run a static type analysis with Dialyzer, run the following command:
+
+```bash
+$ mix dialyzer
+```
+
+### Formatting
+
+This project uses the default configuration for the Elixir formatter. To format
+any changes, run the following command:
+
+```bash
+$ mix format
+```
