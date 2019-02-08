@@ -1,7 +1,7 @@
 defmodule Downstream.DownloadTest do
   use ExUnit.Case
 
-  alias Downstream.Download
+  alias Downstream.{Download, Error, Response}
   alias HTTPoison.{AsyncChunk, AsyncEnd, AsyncHeaders, AsyncStatus}
 
   describe "stream/1" do
@@ -19,7 +19,12 @@ defmodule Downstream.DownloadTest do
       Process.send(task.pid, %AsyncChunk{chunk: "data"}, [:nosuspend])
       Process.send(task.pid, %AsyncEnd{}, [:nosuspend])
 
-      assert Task.await(task) == {:ok, context.io_device}
+      {:ok, %Response{device: device, headers: headers, status_code: code}} = Task.await(task)
+
+      assert device == context.io_device
+      assert code == 200
+      assert is_list(headers)
+
       assert StringIO.flush(context.io_device) == "data"
     end
 
@@ -28,7 +33,11 @@ defmodule Downstream.DownloadTest do
 
       Process.send(task.pid, %AsyncStatus{code: 401}, [:nosuspend])
 
-      assert Task.await(task) == {:error, "status code 401"}
+      {:error, %Error{device: device, reason: :invalid_status_code, status_code: code}} =
+        Task.await(task)
+
+      assert device == context.io_device
+      assert code == 401
     end
 
     test "handles unexpected messages", context do
@@ -36,7 +45,10 @@ defmodule Downstream.DownloadTest do
 
       Process.send(task.pid, :invalid_message, [:nosuspend])
 
-      assert Task.await(task) == {:error, "unexpected error"}
+      {:error, %Error{device: device, reason: error}} = Task.await(task)
+
+      assert device == context.io_device
+      assert error == :unexpected_error
     end
   end
 end

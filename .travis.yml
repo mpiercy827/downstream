@@ -4,6 +4,8 @@ sudo: false
 
 elixir:
   - '1.6.1'
+  - '1.7.0'
+  - '1.8.0'
 
 otp_release:
   - '20.0'
@@ -13,10 +15,10 @@ env:
 
 script:
   - mix compile --warnings-as-errors
-  - mix coveralls.html --max-cases 1
-  - mix credo
-  - mix dialyzer --halt-exit-status
   - mix format --check-formatted --dry-run
+  - mix credo
+  - mix coveralls.html --max-cases 1
+  - mix dialyzer --halt-exit-status
 
 cache:
   directories:

@@ -6,11 +6,11 @@ defmodule Downstream do
   `Downstream` is simple to use, just pass it a URL and an IO device:
   """
 
-  alias Downstream.Download
+  alias Downstream.{Download, Error, Response}
 
   @request_timeout 60_000
 
-  @spec get(binary, IO.device(), Keyword.t()) :: {atom, binary}
+  @spec get(binary, IO.device(), Keyword.t()) :: {:ok, Response.t()} | {:error, Error.t()}
   @doc ~S"""
   Downloads from a given URL with a GET request.
 
@@ -28,7 +28,7 @@ defmodule Downstream do
     try do
       Task.await(download_task, timeout)
     catch
-      :exit, _ -> {:error, "request timeout"}
+      :exit, _ -> {:error, %Error{reason: :timeout}}
     end
   end
 
@@ -37,15 +37,16 @@ defmodule Downstream do
 
   If the request succeeds, the IO device is returned.
   """
-  @spec get!(binary, IO.device(), Keyword.t()) :: binary
+  @spec get!(binary, IO.device(), Keyword.t()) :: Response.t() | Error.t()
   def get!(url, io_device, options \\ []) do
     case get(url, io_device, options) do
-      {:error, error} -> raise to_string(error)
-      {:ok, io_device} -> io_device
+      {:ok, response} -> response
+      {:error, %Error{reason: reason}} -> raise Error, reason: reason
     end
   end
 
-  @spec post(binary, IO.device(), binary | {atom, any}, Keyword.t()) :: {atom, binary}
+  @spec post(binary, IO.device(), binary | {atom, any}, Keyword.t()) ::
+          {:ok, Response.t()} | {:error, Error.t()}
   @doc ~S"""
   Downloads from a given URL with a POST request.
 
@@ -63,11 +64,11 @@ defmodule Downstream do
     try do
       Task.await(download_task, timeout)
     catch
-      :exit, _ -> {:error, "request timeout"}
+      :exit, _ -> {:error, %Error{reason: :timeout}}
     end
   end
 
-  @spec post!(binary, IO.device(), binary | {atom, any}, Keyword.t()) :: binary
+  @spec post!(binary, IO.device(), binary | {atom, any}, Keyword.t()) :: Response.t() | Error.t()
   @doc ~S"""
   Downloads from the given URL with a POST request, raising an exception in the case of failure.
 
@@ -75,8 +76,8 @@ defmodule Downstream do
   """
   def post!(url, io_device, body \\ "", options \\ []) do
     case post(url, io_device, body, options) do
-      {:error, error} -> raise to_string(error)
-      {:ok, io_device} -> io_device
+      {:ok, response} -> response
+      {:error, %Error{reason: reason}} -> raise Error, reason: reason
     end
   end
 end
