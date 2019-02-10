@@ -2,8 +2,6 @@ defmodule DownstreamTest do
   use ExUnit.Case, async: true
   doctest Downstream
 
-  @tag timeout: 10_000
-
   alias Downstream.Error
 
   @get_success_url "https://s3-us-west-2.amazonaws.com/downstream-test/downstream.txt"
