@@ -1,5 +1,5 @@
 defmodule DownstreamTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   doctest Downstream
 
   alias Downstream.Error

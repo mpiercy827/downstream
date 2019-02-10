@@ -10,6 +10,9 @@ defmodule Downstream do
 
   @request_timeout 60_000
 
+  @spec start() :: {atom, any}
+  def start(), do: :application.ensure_all_started(:downstream)
+
   @spec get(binary, IO.device(), Keyword.t()) :: {:ok, Response.t()} | {:error, Error.t()}
   @doc ~S"""
   Downloads from a given URL with a GET request.

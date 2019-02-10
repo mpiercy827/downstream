@@ -26,7 +26,13 @@ end
 
 ## Usage
 
-Using `Downstream` is simple. Just pass it a URL and an IO device:
+Using `Downstream` is simple. First, start it your application:
+
+```elixir
+Downstream.start()
+```
+
+Then, just pass it a URL and an IO device:
 
 ```elixir
 iex(1)> file = File.open!("index.html", [:write])

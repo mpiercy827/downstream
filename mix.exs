@@ -20,7 +20,7 @@ defmodule Downstream.MixProject do
 
   def application do
     [
-      applications: [:httpoison, :logger]
+      applications: [:httpoison]
     ]
   end
 
