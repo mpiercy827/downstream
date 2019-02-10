@@ -18,7 +18,7 @@ script:
   - mix format --check-formatted --dry-run
   - mix credo
   - mix coveralls.html --max-cases 1
-  - mix dialyzer --halt-exit-status
+  - travis_wait mix dialyzer --halt-exit-status
 
 cache:
   directories:
