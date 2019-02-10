@@ -1,13 +1,14 @@
 defmodule DownstreamTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest Downstream
 
-  @tag timeout: 5_000
+  @tag timeout: 10_000
 
   alias Downstream.Error
 
-  @success_url "https://httpstat.us/200"
-  @error_url "https://httpstat.us/404"
+  @get_success_url "https://s3-us-west-2.amazonaws.com/downstream-test/downstream.txt"
+  @post_success_url "https://httpstat.us/200"
+  @error_url "https://s3-us-west-2.amazonaws.com/downstream-test/notfound.txt"
 
   describe "get/3" do
     setup _context do
@@ -17,7 +18,7 @@ defmodule DownstreamTest do
     end
 
     test "successfully downloads a file with a get request", context do
-      {:ok, response} = Downstream.get(@success_url, context.io_device)
+      {:ok, response} = Downstream.get(@get_success_url, context.io_device)
 
       assert response.device == context.io_device
       assert response.status_code == 200
@@ -27,13 +28,11 @@ defmodule DownstreamTest do
     test "returns an error for an unsuccessful download", context do
       {:error, response} = Downstream.get(@error_url, context.io_device)
 
-      assert response.status_code == 404
+      assert response.status_code == 403
     end
 
     test "accepts a configurable timeout", context do
-      url = "#{@success_url}?sleep=5000"
-
-      {:error, error} = Downstream.get(url, context.io_device, timeout: 1_000)
+      {:error, error} = Downstream.get(@get_success_url, context.io_device, timeout: 0)
 
       assert error.reason == :timeout
     end
@@ -47,7 +46,7 @@ defmodule DownstreamTest do
     end
 
     test "successfully downloads a file with a get request", context do
-      response = Downstream.get!(@success_url, context.io_device)
+      response = Downstream.get!(@get_success_url, context.io_device)
 
       assert response.device == context.io_device
       assert response.status_code == 200
@@ -69,7 +68,7 @@ defmodule DownstreamTest do
     end
 
     test "successfully downloads a file with a post request", context do
-      {:ok, response} = Downstream.post(@success_url, context.io_device)
+      {:ok, response} = Downstream.post(@post_success_url, context.io_device)
 
       assert response.device == context.io_device
       assert response.status_code == 200
@@ -79,13 +78,11 @@ defmodule DownstreamTest do
     test "returns an error for an unsuccessful download", context do
       {:error, response} = Downstream.post(@error_url, context.io_device)
 
-      assert response.status_code == 404
+      assert response.status_code == 405
     end
 
     test "accepts a configurable timeout", context do
-      url = "#{@success_url}?sleep=5000"
-
-      {:error, response} = Downstream.get(url, context.io_device, timeout: 1_000)
+      {:error, response} = Downstream.get(@get_success_url, context.io_device, timeout: 0)
 
       assert response.reason == :timeout
     end
@@ -99,7 +96,7 @@ defmodule DownstreamTest do
     end
 
     test "successfully downloads a file with a post request", context do
-      response = Downstream.post!(@success_url, context.io_device)
+      response = Downstream.post!(@post_success_url, context.io_device)
 
       assert response.device == context.io_device
       assert response.status_code == 200
