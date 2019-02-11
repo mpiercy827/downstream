@@ -110,11 +110,6 @@ iex(3)> File.close(file)
 - Stream downloads via HTTP POST requests
 - Configurable request timeouts
 
-## Roadmap
-
-- [ ] Handle redirects
-- [ ] Allow custom configurations
-
 ## Development
 
 ### Running Tests
