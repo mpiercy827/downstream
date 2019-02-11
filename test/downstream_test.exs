@@ -1,14 +1,17 @@
 defmodule DownstreamTest do
   use ExUnit.Case
+  import Mimic
   doctest Downstream
 
-  alias Downstream.Error
+  alias Downstream.{Download, Error, Response}
 
-  @get_success_url "https://s3-us-west-2.amazonaws.com/downstream-test/downstream.txt"
-  @post_success_url "https://httpstat.us/200"
-  @error_url "https://s3-us-west-2.amazonaws.com/downstream-test/notfound.txt"
+  @success_url "https://httpstat.us/200"
+  @error_url "https://httpstat.us/403"
 
   describe "get/3" do
+    setup :verify_on_exit!
+    setup :set_mimic_global
+
     setup _context do
       {:ok, pid} = StringIO.open("get test")
 
@@ -16,27 +19,41 @@ defmodule DownstreamTest do
     end
 
     test "successfully downloads a file with a get request", context do
-      {:ok, response} = Downstream.get(@get_success_url, context.io_device)
+      stub(Download, :stream, fn _ ->
+        {:ok, %Response{device: context.io_device, status_code: 200}}
+      end)
+
+      {:ok, response} = Downstream.get(@success_url, context.io_device)
 
       assert response.device == context.io_device
       assert response.status_code == 200
-      assert is_binary(StringIO.flush(response.device))
     end
 
     test "returns an error for an unsuccessful download", context do
+      stub(Download, :stream, fn _ ->
+        {:error, %Error{status_code: 403}}
+      end)
+
       {:error, response} = Downstream.get(@error_url, context.io_device)
 
       assert response.status_code == 403
     end
 
     test "accepts a configurable timeout", context do
-      {:error, error} = Downstream.get(@get_success_url, context.io_device, timeout: 0)
+      stub(Download, :stream, fn _ ->
+        {:error, %Error{reason: :timeout}}
+      end)
+
+      {:error, error} = Downstream.get(@success_url, context.io_device, timeout: 0)
 
       assert error.reason == :timeout
     end
   end
 
   describe "get!/3" do
+    setup :verify_on_exit!
+    setup :set_mimic_global
+
     setup _context do
       {:ok, pid} = StringIO.open("get! test")
 
@@ -44,14 +61,21 @@ defmodule DownstreamTest do
     end
 
     test "successfully downloads a file with a get request", context do
-      response = Downstream.get!(@get_success_url, context.io_device)
+      stub(Download, :stream, fn _ ->
+        {:ok, %Response{device: context.io_device, status_code: 200}}
+      end)
+
+      response = Downstream.get!(@success_url, context.io_device)
 
       assert response.device == context.io_device
       assert response.status_code == 200
-      assert is_binary(StringIO.flush(response.device))
     end
 
     test "raises an error for an unsuccessful download", context do
+      stub(Download, :stream, fn _ ->
+        {:error, %Error{status_code: 403}}
+      end)
+
       assert_raise Error, fn ->
         Downstream.get!(@error_url, context.io_device)
       end
@@ -59,6 +83,9 @@ defmodule DownstreamTest do
   end
 
   describe "post/4" do
+    setup :verify_on_exit!
+    setup :set_mimic_global
+
     setup _context do
       {:ok, pid} = StringIO.open("post test")
 
@@ -66,27 +93,41 @@ defmodule DownstreamTest do
     end
 
     test "successfully downloads a file with a post request", context do
-      {:ok, response} = Downstream.post(@post_success_url, context.io_device)
+      stub(Download, :stream, fn _ ->
+        {:ok, %Response{device: context.io_device, status_code: 200}}
+      end)
+
+      {:ok, response} = Downstream.post(@success_url, context.io_device)
 
       assert response.device == context.io_device
       assert response.status_code == 200
-      assert is_binary(StringIO.flush(response.device))
     end
 
     test "returns an error for an unsuccessful download", context do
-      {:error, response} = Downstream.post(@error_url, context.io_device)
+      stub(Download, :stream, fn _ ->
+        {:error, %Error{status_code: 403}}
+      end)
 
-      assert response.status_code == 405
+      {:error, error} = Downstream.post(@error_url, context.io_device)
+
+      assert error.status_code == 403
     end
 
     test "accepts a configurable timeout", context do
-      {:error, response} = Downstream.get(@get_success_url, context.io_device, timeout: 0)
+      stub(Download, :stream, fn _ ->
+        {:error, %Error{reason: :timeout}}
+      end)
 
-      assert response.reason == :timeout
+      {:error, error} = Downstream.get(@success_url, context.io_device, timeout: 0)
+
+      assert error.reason == :timeout
     end
   end
 
   describe "post!/4" do
+    setup :verify_on_exit!
+    setup :set_mimic_global
+
     setup _context do
       {:ok, pid} = StringIO.open("post! test")
 
@@ -94,14 +135,21 @@ defmodule DownstreamTest do
     end
 
     test "successfully downloads a file with a post request", context do
-      response = Downstream.post!(@post_success_url, context.io_device)
+      stub(Download, :stream, fn _ ->
+        {:ok, %Response{device: context.io_device, status_code: 200}}
+      end)
+
+      response = Downstream.post!(@success_url, context.io_device)
 
       assert response.device == context.io_device
       assert response.status_code == 200
-      assert is_binary(StringIO.flush(response.device))
     end
 
     test "raises an error for an unsuccessful download", context do
+      stub(Download, :stream, fn _ ->
+        {:error, %Error{status_code: 403}}
+      end)
+
       assert_raise Error, fn ->
         Downstream.post!(@error_url, context.io_device)
       end
