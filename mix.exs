@@ -14,7 +14,7 @@ defmodule Downstream.MixProject do
       start_permanent: Mix.env() == :prod,
       source_url: "https://github.com/mpiercy827/downstream",
       test_coverage: [tool: ExCoveralls],
-      version: "0.1.0"
+      version: "1.0.0"
     ]
   end
 

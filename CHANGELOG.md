@@ -1,3 +1,21 @@
+## 1.0.0 (2019-02-17)
+
+##### Chores
+
+* **contributing:**  Add contribuiting instructions ([9c01cab4](https://github.com/mpiercy827/downstream/commit/9c01cab4736da715f9a60169f6cf9bc68366e828))
+
+##### Documentation Changes
+
+* **readme:**  Add installation and usage instructions ([36d050f7](https://github.com/mpiercy827/downstream/commit/36d050f7231092097b577831cbca0b9291d4562e))
+
+##### New Features
+
+* **response:**  return response object instead of io device on success ([#8](https://github.com/mpiercy827/downstream/pull/8)) ([6b7b211f](https://github.com/mpiercy827/downstream/commit/6b7b211fd7618aaca8f9b94be94007b6d0e18db8))
+
+##### Tests
+
+* **mimic:**  use mimic to stub downloads in tests ([#9](https://github.com/mpiercy827/downstream/pull/9)) ([a90568e6](https://github.com/mpiercy827/downstream/commit/a90568e64a97fcc0ac011f76eadd543b73d3e26a))
+
 ### 0.1.0 (2018-03-20)
 
 ##### Chores
