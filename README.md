@@ -41,7 +41,6 @@ iex(2)> Downstream.get("https://www.google.com", file)
 {:ok,
  %Downstream.Response{
    device: #PID<0.84.0>,
-   error_message: nil,
    headers: [
      {"Date", "Sat, 09 Feb 2019 14:25:34 GMT"},
      {"Expires", "-1"},
@@ -69,7 +68,6 @@ iex(1)> file = File.open!("index.html", [:write])
 iex(2)> Downstream.get("https://www.google.com", file)
 %Downstream.Response{
   device: #PID<0.84.0>,
-  error_message: nil,
   headers: [
     {"Date", "Sat, 09 Feb 2019 14:25:34 GMT"},
     {"Expires", "-1"},

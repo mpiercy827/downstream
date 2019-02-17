@@ -7,7 +7,7 @@ defmodule Downstream.MixProject do
       deps: deps(),
       docs: docs(),
       description: "An Elixir Client for Streaming Downloads",
-      elixir: "~> 1.6",
+      elixir: "~> 1.7",
       name: "Downstream",
       package: package(),
       preferred_cli_env: ["coveralls.html": :test],
@@ -26,11 +26,11 @@ defmodule Downstream.MixProject do
 
   defp deps do
     [
-      {:credo, "~> 0.8.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.8", only: [:test]},
-      {:ex_doc, "~> 0.16", only: :dev, runtime: false},
-      {:httpoison, "~> 1.0.0"},
+      {:excoveralls, "~> 0.10", only: [:test]},
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
+      {:httpoison, "~> 1.5.0"},
       {:mimic, "~> 0.2", only: :test}
     ]
   end
