@@ -19,7 +19,7 @@ end
 
 def deps do
   [
-    {:downstream, "~> 0.1.0"}
+    {:downstream, "~> 1.0.0"}
   ]
 end
 ```
