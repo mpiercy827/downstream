@@ -1,3 +1,9 @@
+## 1.0.1 (2021-05-14)
+
+##### Chores
+
+* **dependencies:**  Allow more flexible dependencies ([7a149125](https://github.com/mpiercy827/downstream/commit/7a14912592843d2b52388a40f16b1826e7d88c93))
+
 ## 1.0.0 (2019-02-17)
 
 ##### Chores
