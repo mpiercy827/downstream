@@ -14,7 +14,7 @@ defmodule Downstream.MixProject do
       start_permanent: Mix.env() == :prod,
       source_url: "https://github.com/mpiercy827/downstream",
       test_coverage: [tool: ExCoveralls],
-      version: "1.0.0"
+      version: "1.0.1"
     ]
   end
 
@@ -29,7 +29,7 @@ defmodule Downstream.MixProject do
       {:credo, "~> 1.0", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 0.5", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.10", only: [:test]},
-      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.24", only: :dev, runtime: false},
       {:httpoison, "~> 1.5"},
       {:mimic, "~> 0.2", only: :test}
     ]
