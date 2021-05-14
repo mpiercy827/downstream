@@ -1,3 +1,9 @@
+## 1.1.0 (2021-05-14)
+
+##### New Features
+
+* **options:**  Add HTTPoison options ([cbc5a34](https://github.com/mpiercy827/downstream/commit/cbc5a34c15b0c129bc3ac2a390c926a2f5e24917))
+
 ## 1.0.1 (2021-05-14)
 
 ##### Chores
