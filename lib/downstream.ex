@@ -23,10 +23,12 @@ defmodule Downstream do
   def get(url, io_device, options \\ []) do
     timeout = Keyword.get(options, :timeout, @request_timeout)
     headers = Keyword.get(options, :headers, [])
+    http_options = Keyword.get(options, :http_options, [])
 
     download_task = Task.async(Download, :stream, [io_device])
+    httpoison_options = Keyword.merge(http_options, stream_to: download_task.pid)
 
-    HTTPoison.get!(url, headers, stream_to: download_task.pid)
+    HTTPoison.get!(url, headers, httpoison_options)
 
     try do
       Task.await(download_task, timeout)
@@ -59,10 +61,13 @@ defmodule Downstream do
   def post(url, io_device, body \\ "", options \\ []) do
     timeout = Keyword.get(options, :timeout, @request_timeout)
     headers = Keyword.get(options, :headers, [])
+    http_options = Keyword.get(options, :http_options, [])
 
     download_task = Task.async(Download, :stream, [io_device])
 
-    HTTPoison.post!(url, body, headers, stream_to: download_task.pid)
+    httpoison_options = Keyword.merge(http_options, stream_to: download_task.pid)
+
+    HTTPoison.post!(url, body, headers, httpoison_options)
 
     try do
       Task.await(download_task, timeout)
