@@ -1,3 +1,10 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 ## 1.1.0 (2021-05-14)
 
 ##### New Features
@@ -47,4 +54,3 @@
 * **get:**  Add get and get! methods to Downstream ([#3](https://github.com/mpiercy827/downstream/pull/3)) ([a856d7b4](https://github.com/mpiercy827/downstream/commit/a856d7b4cf7628133f994e9fb19375cad9c8a8c1))
 * **download:**  Add Download module ([#2](https://github.com/mpiercy827/downstream/pull/2)) ([04f5deef](https://github.com/mpiercy827/downstream/commit/04f5deefe45493497d407e8b7c0e1668a1d051e6))
 * **base:**  setup project base ([#1](https://github.com/mpiercy827/downstream/pull/1)) ([fe5b44aa](https://github.com/mpiercy827/downstream/commit/fe5b44aa61bf3b619257a1a82a43d72cb087e675))
-
