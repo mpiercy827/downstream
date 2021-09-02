@@ -1,9 +1,12 @@
 # Downstream
 
-
 [![Travis](https://img.shields.io/travis/mpiercy827/downstream.svg)](https://travis-ci.org/mpiercy827/downstream)
 [![Hex.pm](https://img.shields.io/hexpm/v/downstream.svg)](https://hex.pm/packages/downstream/)
-
+[![Module Version](https://img.shields.io/hexpm/v/downstream.svg)](https://hex.pm/packages/downstream)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/downstream/)
+[![Total Download](https://img.shields.io/hexpm/dt/downstream.svg)](https://hex.pm/packages/downstream)
+[![License](https://img.shields.io/hexpm/l/downstream.svg)](https://github.com/mpiercy827/downstream/blob/master/LICENSE.md)
+[![Last Updated](https://img.shields.io/github/last-commit/mpiercy827/downstream.svg)](https://github.com/yyy/downstream/commits/master)
 
 Downstream is a library for downloading files via HTTPoison response streaming.
 
@@ -143,3 +146,10 @@ any changes, run the following command:
 ```bash
 $ mix format
 ```
+
+## Copyright and License
+
+Copyright (c) 2018 Matt Piercy
+
+This work is free. You can redistribute it and/or modify it under the
+terms of the MIT License. See the [LICENSE.md](./LICENSE.md) file for more details.
