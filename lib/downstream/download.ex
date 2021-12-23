@@ -36,9 +36,6 @@ defmodule Downstream.Download do
   end
 
   defp handle_response_chunk(%HTTPoison.AsyncRedirect{to: to}, request_params, _response) do
-    IO.puts "========================"
-    IO.inspect :aaaaa
-    IO.puts "========================"
     params = [to, request_params.io_device, request_params[:body], request_params.options] |> Enum.reject(&is_nil/1)
     apply(Downstream, request_params.type, params)
   end
