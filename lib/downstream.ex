@@ -25,8 +25,12 @@ defmodule Downstream do
     headers = Keyword.get(options, :headers, [])
     http_options = Keyword.get(options, :http_options, [])
 
-    download_task = Task.async(Download, :stream, [io_device])
-    httpoison_options = Keyword.merge(http_options, stream_to: download_task.pid)
+    download_task =
+      Task.async(Download, :stream, [
+        %{type: :get, io_device: io_device, options: options}
+      ])
+
+    httpoison_options = Keyword.merge(http_options, stream_to: download_task.pid, follow_redirect: true)
 
     HTTPoison.get!(url, headers, httpoison_options)
 
@@ -63,9 +67,12 @@ defmodule Downstream do
     headers = Keyword.get(options, :headers, [])
     http_options = Keyword.get(options, :http_options, [])
 
-    download_task = Task.async(Download, :stream, [io_device])
+    download_task =
+      Task.async(Download, :stream, [
+        %{type: :post, io_device: io_device, body: body, options: options}
+      ])
 
-    httpoison_options = Keyword.merge(http_options, stream_to: download_task.pid)
+    httpoison_options = Keyword.merge(http_options, stream_to: download_task.pid, follow_redirect: true)
 
     HTTPoison.post!(url, body, headers, httpoison_options)
 

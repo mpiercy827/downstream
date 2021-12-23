@@ -6,6 +6,7 @@ defmodule DownstreamTest do
   alias Downstream.{Download, Error, Response}
 
   @success_url "https://httpstat.us/200"
+  @redirect_url "https://httpstat.us/301"
   @error_url "https://httpstat.us/403"
 
   describe "get/3" do
@@ -24,6 +25,17 @@ defmodule DownstreamTest do
       end)
 
       {:ok, response} = Downstream.get(@success_url, context.io_device)
+
+      assert response.device == context.io_device
+      assert response.status_code == 200
+    end
+
+    test "successfully redirect and downloads a file with a get request", context do
+      stub(Download, :stream, fn _ ->
+        {:ok, %Response{device: context.io_device, status_code: 200}}
+      end)
+
+      {:ok, response} = Downstream.get(@redirect_url, context.io_device)
 
       assert response.device == context.io_device
       assert response.status_code == 200
@@ -71,6 +83,17 @@ defmodule DownstreamTest do
       assert response.status_code == 200
     end
 
+    test "successfully redirect and downloads a file with a get request", context do
+      stub(Download, :stream, fn _ ->
+        {:ok, %Response{device: context.io_device, status_code: 200}}
+      end)
+
+      response = Downstream.get!(@redirect_url, context.io_device)
+
+      assert response.device == context.io_device
+      assert response.status_code == 200
+    end
+
     test "raises an error for an unsuccessful download", context do
       stub(Download, :stream, fn _ ->
         {:error, %Error{status_code: 403}}
@@ -98,6 +121,17 @@ defmodule DownstreamTest do
       end)
 
       {:ok, response} = Downstream.post(@success_url, context.io_device)
+
+      assert response.device == context.io_device
+      assert response.status_code == 200
+    end
+
+    test "successfully redirect and downloads a file with a post request", context do
+      stub(Download, :stream, fn _ ->
+        {:ok, %Response{device: context.io_device, status_code: 200}}
+      end)
+
+      {:ok, response} = Downstream.post(@redirect_url, context.io_device)
 
       assert response.device == context.io_device
       assert response.status_code == 200
@@ -140,6 +174,17 @@ defmodule DownstreamTest do
       end)
 
       response = Downstream.post!(@success_url, context.io_device)
+
+      assert response.device == context.io_device
+      assert response.status_code == 200
+    end
+
+    test "successfully redirect and downloads a file with a post request", context do
+      stub(Download, :stream, fn _ ->
+        {:ok, %Response{device: context.io_device, status_code: 200}}
+      end)
+
+      response = Downstream.post!(@redirect_url, context.io_device)
 
       assert response.device == context.io_device
       assert response.status_code == 200
