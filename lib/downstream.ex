@@ -28,7 +28,7 @@ defmodule Downstream do
     download_task = Task.async(Download, :stream, [io_device])
     httpoison_options = Keyword.merge(http_options, stream_to: download_task.pid)
 
-    HTTPoison.get!(url, headers, httpoison_options)
+    http_client().get!(url, headers, httpoison_options)
 
     try do
       Task.await(download_task, timeout)
@@ -67,7 +67,7 @@ defmodule Downstream do
 
     httpoison_options = Keyword.merge(http_options, stream_to: download_task.pid)
 
-    HTTPoison.post!(url, body, headers, httpoison_options)
+    http_client().post!(url, body, headers, httpoison_options)
 
     try do
       Task.await(download_task, timeout)
@@ -87,5 +87,9 @@ defmodule Downstream do
       {:ok, response} -> response
       {:error, %Error{reason: reason}} -> raise Error, reason: reason
     end
+  end
+
+  def http_client() do
+    Application.get_env(:downstream, :http_client, HTTPoison)
   end
 end

@@ -1,9 +1,7 @@
 # Downstream
 
-
 [![Travis](https://img.shields.io/travis/mpiercy827/downstream.svg)](https://travis-ci.org/mpiercy827/downstream)
 [![Hex.pm](https://img.shields.io/hexpm/v/downstream.svg)](https://hex.pm/packages/downstream/)
-
 
 Downstream is a library for downloading files via HTTPoison response streaming.
 
@@ -102,6 +100,7 @@ iex(2)> Downstream.get("https://www.google.com/notfound", file)
 iex(3)> File.close(file)
 :ok
 ```
+
 ## Current Features
 
 - Stream downloads via HTTP GET requests
@@ -142,4 +141,27 @@ any changes, run the following command:
 
 ```bash
 $ mix format
+```
+
+### Testing
+
+HTTPoison can be swapped for a mock using configs.
+
+In test_helpers.exs
+
+```elixir
+Mox.defmock(AppName.MockHttp, for: HTTPoison.Base)
+Application.put_env(:downstream, :http_client, AppName.MockHttp)
+```
+
+In \*\_test.exs
+
+```elixir
+AppName.MockHttp
+|> expect(:get!, fn "http://localhost/test", [], [stream_to: pid] ->
+  send(pid, %HTTPoison.AsyncChunk{chunk: content})
+  send(pid, %HTTPoison.AsyncStatus{code: 200})
+  send(pid, %HTTPoison.AsyncHeaders{headers: []})
+  send(pid, %HTTPoison.AsyncEnd{})
+end)
 ```
